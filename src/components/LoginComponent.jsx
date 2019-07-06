@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
+import AunthenticationService from '../Authentication/AuthenticationService'
 
 class LoginComponent extends Component {
 
     constructor(Props) {
         super(Props)
         this.state = {
-            username: "",
-            password: "",
+            username: "admin",
+            password: "admin",
             showFailureMessage: false,
         }
     }
@@ -16,14 +17,14 @@ class LoginComponent extends Component {
                 {this.state.showFailureMessage && <div className="alert alert-warning">Invalid Credentials</div>}
                 <h1>Login</h1>
                 <div className="form-group col-xs-2">
-                    <label for="username">User Name</label>
+                    <label htmlFor="username">User Name</label>
                     <input type="text" name="username" value={this.state.username} onChange={this.handleChange} className="form-control" id="username" placeholder="Enter email" />
                 </div>
                 <div className="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" value={this.state.password} onChange={this.handleChange} className="form-control" id="username" placeholder="Enter Password" />
+                    <label htmlFor="password">Password</label>
+                    <input type="password" name="password" value={this.state.password} onChange={this.handleChange} className="form-control" id="password" placeholder="Enter Password" />
                 </div>
-                <button type="submit" class="btn btn-primary mb-2" onClick={this.loginClicked}>Login</button>
+                <button type="submit" className="btn btn-primary mb-2" onClick={this.loginClicked}>Login</button>
             </div>
         )
     }
@@ -37,6 +38,7 @@ class LoginComponent extends Component {
     loginClicked = (event) => {
         if (this.state.username === 'admin' && this.state.password === 'admin') {
             this.props.history.push(`/welcome/${this.state.username}`)
+            AunthenticationService.registerSuccessfulLogin(this.state.username,this.state.password)
         }
         else {
             this.setState({
