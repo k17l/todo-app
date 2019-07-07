@@ -46,9 +46,14 @@ export default class WelcomeComponent extends Component {
     }
 
     handleErrorResponse = (error) => {
-        console.log(error.response)
-        this.setState({
-            errorMessage: error.response.data.message
-        })
+        console.log(error)
+        
+        let errorMessage = '';
+        if (error.message)
+            errorMessage += error.message
+        if (error.response && error.response.data) {
+            errorMessage += error.response.data.message
+        }
+        this.setState({errorMessage})
     }
 }

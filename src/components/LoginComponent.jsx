@@ -6,8 +6,8 @@ class LoginComponent extends Component {
     constructor(Props) {
         super(Props)
         this.state = {
-            username: "admin",
-            password: "admin",
+            username: '',
+            password: '',
             showFailureMessage: false,
         }
     }
@@ -35,16 +35,28 @@ class LoginComponent extends Component {
         })
     }
 
-    loginClicked = (event) => {
-        if (this.state.username === 'admin' && this.state.password === 'admin') {
-            this.props.history.push(`/welcome/${this.state.username}`)
-            AunthenticationService.registerSuccessfulLogin(this.state.username,this.state.password)
-        }
-        else {
-            this.setState({
-                showFailureMessage: true
+    loginClicked = () => {
+        // if (this.state.username === 'user' && this.state.password === 'password') {
+        //     this.props.history.push(`/welcome/${this.state.username}`)
+        //     AunthenticationService.registerSuccessfulLogin(this.state.username, this.state.password)
+        // }
+        // else {
+        //     this.setState({
+        //         showFailureMessage: true
+        //     })
+        // }
+
+        AunthenticationService.executeBasicAuthenticationService(this.state.username, this.state.password)
+            .then(
+                () => {
+                    AunthenticationService.registerSuccessfulLogin(this.state.username, this.state.password)
+                    this.props.history.push(`/welcome/${this.state.username}`)
+                }
+            ).catch(() => {
+                this.setState({
+                    showFailureMessage: true
+                })
             })
-        }
     }
 }
 

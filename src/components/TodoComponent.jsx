@@ -92,7 +92,7 @@ class TodoComponent extends Component {
                                         <Field className="form-control" type="date" name="targetDate"></Field>
                                         <ErrorMessage name="targetDate" component="div" className="alert alert-warning" />
                                    </fieldset>
-                                   <button className="btn btn-success">Save</button>
+                                   <button type="submit" className="btn btn-success">Save</button>
                                </Form>
                             )
                         }
