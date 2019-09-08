@@ -13,10 +13,10 @@ class LoginComponent extends Component {
     }
     render() {
         return (
-            <div>
+            <div className="container w-25 p-3">
                 {this.state.showFailureMessage && <div className="alert alert-warning">Invalid Credentials</div>}
                 <h1>Login</h1>
-                <div className="form-group col-xs-2">
+                <div className="form-group">
                     <label htmlFor="username">User Name</label>
                     <input type="text" name="username" value={this.state.username} onChange={this.handleChange} className="form-control" id="username" placeholder="Enter email" />
                 </div>

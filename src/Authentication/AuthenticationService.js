@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { API_URL } from '../constants/constants'
+import Cookie from "js-cookie"
 export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser'
 
 class AuthenticationService {
@@ -24,18 +25,20 @@ class AuthenticationService {
         return 'Bearer ' + token
     }
 
-    registerSuccessfulLogin(username, password) {
-        sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username)
-        this.setupAxiosInterceptors(this.createBasicAuthToken(username, password))
-    }
+    // registerSuccessfulLogin(username, password) {
+    //     sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username)
+    //     this.setupAxiosInterceptors(this.createBasicAuthToken(username, password))
+    // }
 
     registerSuccessfulLoginForJwt(username, token) {
         sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username)
-        this.setupAxiosInterceptors(this.createJWTToken(token))
+        Cookie.set("token", token);
+        this.setupAxiosInterceptors(token)
     }
 
     logout() {
         sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME)
+        Cookie.remove("token")
     }
 
     isUserLoggedIn() {
@@ -54,11 +57,13 @@ class AuthenticationService {
             return username
     }
 
-    setupAxiosInterceptors(basicAuthHeader) {
+    setupAxiosInterceptors(token) {
+        token = Cookie.get("token") ? Cookie.get("token") : token;
+        const jwtTokenHeader = this.createJWTToken(token);
         axios.interceptors.request.use(
             (config) => {
                 if (this.isUserLoggedIn)
-                    config.headers.authorization = basicAuthHeader
+                    config.headers.authorization = jwtTokenHeader
                 return config
             }
         )
